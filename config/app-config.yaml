@@ -1,0 +1,5 @@
+# env is used to determine which deployment environment the app is running in.
+env: "local"
+# db_conn is the connection string for the database.
+http_server:
+  port: ":8080"

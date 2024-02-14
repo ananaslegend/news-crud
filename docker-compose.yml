@@ -1,0 +1,55 @@
+version: "3.8"
+
+networks:
+  news-service-net:
+    driver: bridge
+
+services:
+  news:
+    build:
+      context: .
+    container_name: news-service
+    restart: always
+    depends_on:
+      - postgres
+      - migrations
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./scripts/wait-for-it.sh:/wait-for-it.sh
+    networks:
+      - news-service-net
+    env_file:
+      - .env
+
+  postgres:
+    image: postgres:14
+    container_name: news-service-postgresql
+    restart: always
+    ports:
+      - "5432:5432"
+    volumes:
+      - news-service-postgres:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: news-service
+    networks:
+      - news-service-net
+
+  migrations:
+    image: migrate/migrate
+    container_name: migrations
+    restart: on-failure
+    depends_on:
+      - postgres
+    volumes:
+      - ./scripts/wait-for-it.sh:/wait-for-it.sh
+      - ./migrations:/migrations
+    entrypoint: [ ]
+    command: /wait-for-it.sh postgres:5432 -- migrate -path=/migrations/ -database postgresql://postgres:postgres@postgres:5432/news-service?sslmode=disable up
+    networks:
+      - news-service-net
+
+volumes:
+  news-service-postgres:
