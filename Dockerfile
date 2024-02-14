@@ -1,4 +1,4 @@
-FROM golang:1.21-alpine AS builder
+FROM golang:1.22-alpine AS builder
 
 WORKDIR /app
 
@@ -9,11 +9,11 @@ RUN go mod download
 
 COPY . .
 
-RUN  cd cmd/news && go build -o /bin/news
+RUN  cd cmd/app && go build -o /bin/app
 
 FROM alpine:latest
 
-COPY --from=builder /bin/news /app/news
+COPY --from=builder /bin/app /app/news
 
 RUN chmod +x /app/news
 

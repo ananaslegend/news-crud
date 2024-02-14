@@ -94,12 +94,12 @@ func (p PostHandler) CreatePost(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	w.WriteHeader(http.StatusCreated)
 	if err := json.NewEncoder(w).Encode(map[string]int{"post_id": postID}); err != nil {
 		logger.Error("cant encode response", logs.Err(err))
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
-	w.WriteHeader(http.StatusCreated)
 	return
 }
 
