@@ -38,3 +38,43 @@ test:
 	@echo "::> Running tests..."
 	@go test --race -v ./...
 	@echo "::> Finished!"
+
+.PHONY: compose
+compose:
+	@echo "::> Running docker-compose..."
+	@docker-compose up -d
+
+.PHONY: hepl
+help:
+	@echo "Usage: make <target>"
+	@echo ""
+	@echo "Targets:"
+	@echo "  get-migrate   - Install migrate tool"
+	@echo "  migrate-up    - Run migrations up"
+	@echo "  migrate-down  - Run migrations down"
+	@echo "  build         - Build the application"
+	@echo "  run           - Run the application"
+	@echo "  test          - Run tests"
+	@echo "  compose       - Run docker-compose"
+	@echo "  help          - Show this help message"
+	@echo ""
+	@echo "Variables:"
+	@echo "  BINARIES      - Directory to store binaries"
+	@echo "  BINARY_NAME   - Name of the binary"
+	@echo "  COVER_FILE    - File to store coverage"
+	@echo "  MIGRATIONS    - Directory to store migrations"
+	@echo "  DB_URL        - Database URL"
+	@echo "  DB_DRIVER     - Database driver"
+	@echo ""
+	@echo "Example:"
+	@echo "  make build"
+	@echo "  make run"
+	@echo "  make test"
+	@echo "  make compose"
+	@echo "  make migrate-up"
+	@echo "  make migrate-down"
+	@echo "  make get-migrate"
+	@echo "  make help"
+	@echo ""
+	@echo "For more information, see the Makefile"
+	@echo ""
